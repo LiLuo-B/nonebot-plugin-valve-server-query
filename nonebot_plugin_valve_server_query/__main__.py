@@ -1,5 +1,5 @@
 from nonebot.params import CommandArg, CommandStart, RawCommand
-from .config import ServerInformationConfig
+from .model import ServerInformationConfig
 from .queries import queries_server_info, queries_group_info
 from .check import is_valid_address, is_valid_port, is_valid_address_port
 from .database import sq_L4D2

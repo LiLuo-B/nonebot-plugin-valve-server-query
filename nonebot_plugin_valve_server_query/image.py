@@ -1,14 +1,13 @@
+from pathlib import Path
 from nonebot import require
 import jinja2
 
 require("nonebot_plugin_htmlrender")
 from nonebot_plugin_htmlrender import html_to_pic
-from .config import (
-    templates_path,
-    resources_path,
-    ServerInformationConfig,
-)
+from .model import ServerInformationConfig
 
+resources_path = Path(__file__).resolve().parent / "resources"
+templates_path = resources_path / "templates"
 env = jinja2.Environment(
     loader=jinja2.FileSystemLoader(templates_path),
     enable_async=True,
@@ -16,6 +15,7 @@ env = jinja2.Environment(
 
 
 async def server_info_img(server_info: ServerInformationConfig) -> bytes:
+    print(templates_path)
     template = env.get_template("server_info.html")
     html = await template.render_async(
         resources_path=f"file://{resources_path}", server_info=server_info

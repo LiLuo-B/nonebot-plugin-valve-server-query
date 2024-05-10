@@ -3,7 +3,7 @@ from . import __main__ as __main__
 from .config import Config
 
 __plugin_meta__ = PluginMetadata(
-    name="nonebot_plugin_l4d2_server",
+    name="nonebot_plugin_valve_server_query",
     description="",
     usage="",
     config=Config,

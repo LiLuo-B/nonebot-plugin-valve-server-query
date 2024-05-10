@@ -1,5 +1,5 @@
 from a2s import ainfo, aplayers, SourceInfo, Player
-from .config import ServerInformationConfig, PlayerInformationConfig
+from .model import ServerInformationConfig,PlayerInformationConfig
 from asyncio.exceptions import TimeoutError
 from .database import sq_L4D2
 import asyncio

@@ -9,6 +9,6 @@ requires-python = ">=3.8, <4.0"
 adapters = [
     { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" }
 ]
-plugins = []
-plugin_dirs = ["nonebot_plugin_valve_server_query/plugins"]
+plugins = ["nonebot_plugin_valve_server_query", "nonebot_plugin_htmlrender"]
+plugin_dirs = []
 builtin_plugins = []

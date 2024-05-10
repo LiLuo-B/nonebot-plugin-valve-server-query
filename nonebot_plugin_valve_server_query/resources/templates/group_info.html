@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{resources_path}}/templates/group_info.css">
+    <title>服务器组信息</title>
+</head>
+
+<body>
+    <div class="glass-container">
+        <div class="group_name">{{group_name}}</div>
+        <div class="group_info">
+            [在线服务器：{{server_online_count}}/{{server_count}}&nbsp;&nbsp;&nbsp;&nbsp;在线玩家：{{player_online_count}}/{{player_count}}]
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th class="server_id">ID</th>
+                    <th class="server_name">服务器名</th>
+                    <th class="server_map">地图</th>
+                    <th class="server_version">版本</th>
+                    <th class="server_delay">延时</th>
+                    <th class="server_players">玩家</th>
+                    <th class="server_os">平台</th>
+                </tr>
+                <tr>
+                    <td colspan="7">
+                        <hr>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for id,server_info in group_info %}
+                <tr>
+                    {% if server_info != None %}
+                    <td>
+                        <div class="cube-blue">{{id}}</div>
+                    </td>
+                    <td>{{server_info.server_name}}</td>
+                    <td>{{server_info.map_name}}</td>
+                    <td>{{server_info.version}}</td>
+                    <td>{{server_info.ping}}ms</td>
+                    <td>{{server_info.player_count}}/{{server_info.max_players}}</td>
+                    <td>
+                        {% if server_info.platform == "Linux" %}
+                        <img src="{{resources_path}}/icons/linux.svg" alt="SVG Icon">
+                        {% elif server_info.platform == "Windows" %}
+                        <img src="{{resources_path}}/icons/windows.svg" alt="SVG Icon">
+                        {% else %}
+                        <img src="{{resources_path}}/icons/macos.svg" alt="SVG Icon">
+                        {% endif %}
+                    </td>
+                    {% else %}
+                    <td>
+                        <div class="cube-red">{{id}}</div>
+                    </td>
+                    <td>服务器无响应</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</body>

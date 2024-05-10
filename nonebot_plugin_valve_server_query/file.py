@@ -1,6 +1,6 @@
 import re
 import json
-from .config import CQFile
+from .model import CQFile
 from .database import sq_L4D2
 
 
