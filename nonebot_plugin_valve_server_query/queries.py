@@ -18,17 +18,26 @@ async def queries_server_info(ip_port: str) -> ServerInformationConfig | bool:
             PlayerInformationConfig(
                 name=player_info.name,
                 score=player_info.score,
-                duration=player_info.duration,
+                duration=f"{int(player_info.duration//3600)}h{int(player_info.duration% 3600 // 60)}m{int(player_info.duration) % 60}s",
             )
         )
     return ServerInformationConfig(
         game_name=server_info.game,
         server_name=server_info.server_name,
+        platform=(
+            "Linux"
+            if server_info.platform == "l"
+            else (
+                "Windows"
+                if server_info.platform == "w"
+                else ("macOS" if server_info.platform == "m" else "Unknown")
+            )
+        ),
         version=server_info.version,
         map_name=server_info.map_name,
         player_count=server_info.max_players,
         max_players=server_info.max_players,
-        ping=server_info.ping,
+        ping=round(server_info.ping * 1000),
         players=players,
     )
 
@@ -45,11 +54,20 @@ async def queries_info(
         ServerInformationConfig(
             game_name=server_info.game,
             server_name=server_info.server_name,
+            platform=(
+                "Linux"
+                if server_info.platform == "l"
+                else (
+                    "Windows"
+                    if server_info.platform == "w"
+                    else ("macOS" if server_info.platform == "m" else "Unknown")
+                )
+            ),
             version=server_info.version,
             map_name=server_info.map_name,
             player_count=server_info.max_players,
             max_players=server_info.max_players,
-            ping=server_info.ping,
+            ping=round(server_info.ping * 1000),
         ),
     )
 
