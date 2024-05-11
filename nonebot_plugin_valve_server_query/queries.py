@@ -1,5 +1,5 @@
 from a2s import ainfo, aplayers, SourceInfo, Player
-from .model import ServerInformationConfig,PlayerInformationConfig
+from .model import ServerInformationConfig, PlayerInformationConfig
 from asyncio.exceptions import TimeoutError
 from .database import sq_L4D2
 import asyncio
@@ -16,20 +16,20 @@ async def queries_server_info(ip_port: str) -> ServerInformationConfig | bool:
     for player_info in players_info:
         players.append(
             PlayerInformationConfig(
-                player_info.name,
-                player_info.score,
-                player_info.duration,
+                name=player_info.name,
+                score=player_info.score,
+                duration=player_info.duration,
             )
         )
     return ServerInformationConfig(
-        server_info.server_name,
-        server_info.platform,
-        server_info.version,
-        server_info.map_name,
-        server_info.player_count,
-        server_info.max_players,
-        server_info.ping,
-        players,
+        game_name=server_info.game,
+        server_name=server_info.server_name,
+        version=server_info.version,
+        map_name=server_info.map_name,
+        player_count=server_info.max_players,
+        max_players=server_info.max_players,
+        ping=server_info.ping,
+        players=players,
     )
 
 
@@ -43,14 +43,13 @@ async def queries_info(
     return (
         id,
         ServerInformationConfig(
-            server_info.server_name,
-            server_info.platform,
-            server_info.version,
-            server_info.map_name,
-            server_info.player_count,
-            server_info.max_players,
-            server_info.ping,
-            [],
+            game_name=server_info.game,
+            server_name=server_info.server_name,
+            version=server_info.version,
+            map_name=server_info.map_name,
+            player_count=server_info.max_players,
+            max_players=server_info.max_players,
+            ping=server_info.ping,
         ),
     )
 

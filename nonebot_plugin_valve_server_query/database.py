@@ -1,10 +1,10 @@
 import sqlite3
 from pathlib import Path
 from nonebot.log import logger
-from .config import l4d2_path
 
+l4d2_path = Path.cwd() / "data/l4d2"
 
-class L4D2DataSqlite:
+class L4D2DataSqlite():
     """连接数据库和断开数据库，以及一些检查函数"""
 
     def __init__(self):
@@ -107,5 +107,6 @@ class L4D2DataSqlite:
     def get_l4d2_groups_name(self) -> list:
         cursor = self.c.execute("SELECT DISTINCT GROUP_NAME FROM L4D2_GROUP;")
         return cursor.fetchall()
+
 
 sq_L4D2 = L4D2DataSqlite()
