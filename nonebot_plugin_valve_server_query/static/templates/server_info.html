@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <div class="info-container">
+    <div class="glass-container">
         <h1>{{server_info.game_name}}</h1>
         <h1>{{server_info.server_name}}</h1>
         <h2>服务器信息</h2>
@@ -41,10 +41,10 @@
 
         <table id="player-info">
             <tr>
-                <th width="60%">玩家名字</th>
-                <th width="15%">积分</th>
+                <th width="15%">分数</th>
                 <th width="25%">在线时长</th>
             </tr>
+            <th width="60%">玩家名字</th>
             {% for player in server_info.players %}
             <tr>
                 <td>{{player.name}}</td>

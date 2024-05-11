@@ -18,14 +18,26 @@
     src: url('../fonts/江城圆体\ 300W.ttf') format('truetype');
 }
 
-body {
-    padding: 20px;
-    background-image: url("../images/background.jpg");
+.glass-container {
+    width: 450px;
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    width: 540px;
-    margin: 0 auto;
+    margin: auto;
+    margin-top: 25px;
+    color: white;
+    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 8px;
+    border: 0px rgba(255, 255, 255, 0.4) solid;
+    border-radius: 5px;
+    border-bottom: 0px rgba(40, 40, 40, 0.35) solid;
+    border-right: 0px rgba(40, 40, 40, 0.35) solid;
+
+}
+
+body {
+    background-image: url("../images/background.jpg");
 }
 
 .info-container {
