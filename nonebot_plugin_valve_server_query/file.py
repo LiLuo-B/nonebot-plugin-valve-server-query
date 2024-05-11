@@ -2,9 +2,10 @@ import re
 import json
 from .model import CQFile
 from .database import sq_L4D2
+from typing import Optional, List, Tuple
 
 
-def get_file_info(CQ_code: str) -> CQFile | None:
+def get_file_info(CQ_code: str) -> Optional[CQFile]:
     match = re.search(r"CQ:([^,]+)", CQ_code)
     if match:
         CQ_type = match.group(1)
@@ -12,7 +13,7 @@ def get_file_info(CQ_code: str) -> CQFile | None:
             file_name = re.search(r"file=([^,]+)", CQ_code).group(1)
             file_id = re.search(r"file_id=([^,]+)", CQ_code).group(1)
             file_size = re.search(r"file_size=(\d+)", CQ_code).group(1)
-            return CQFile(file_name, file_id, int(file_size))
+            return CQFile(file_name=file_name, file_id=file_id, file_size=file_size)
     return None
 
 
@@ -22,7 +23,7 @@ def is_json_file(filename: str) -> bool:
 
 def parse_json_file(
     file_path: str,
-) -> list[tuple[str, bool, int, int, int, int]] | None:
+) -> Optional[List[Tuple[str, bool, int, int, int, int]]]:
     json_flie = open(file_path, "r")
     content = json_flie.read()
     groups_name = [group_name[0] for group_name in sq_L4D2.get_l4d2_groups_name()]

@@ -24,7 +24,7 @@ class ServerInformationConfig(BaseModel):
     player_count: int
     max_players: int
     ping: float
-    players: Optional[List[PlayerInformationConfig]]
+    players: Optional[List[PlayerInformationConfig]]=[]
 
     @property
     def platform(self) -> str:
@@ -44,7 +44,6 @@ class ServerInformationConfig(BaseModel):
 
 
 class CQFile(BaseModel):
-    def __init__(self, file_name: str, file_id: str, file_size: int) -> None:
-        self.file_name = file_name
-        self.file_id = file_id
-        self.file_size = file_size
+    file_name: str
+    file_id: str
+    file_size: int

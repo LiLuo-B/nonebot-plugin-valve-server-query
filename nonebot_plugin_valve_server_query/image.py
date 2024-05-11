@@ -6,7 +6,7 @@ require("nonebot_plugin_htmlrender")
 from nonebot_plugin_htmlrender import html_to_pic
 from .model import ServerInformationConfig
 
-resources_path = Path(__file__).resolve().parent / "resources"
+resources_path = Path(__file__).resolve().parent / "static"
 templates_path = resources_path / "templates"
 env = jinja2.Environment(
     loader=jinja2.FileSystemLoader(templates_path),
