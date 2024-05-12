@@ -48,6 +48,7 @@ class ValveServerSqlite:
                 json.dump(authority_data, json_file, ensure_ascii=False)
         self.conn = sqlite3.connect(valve_db_path)
         self.c = self.conn.cursor()
+        self.del_valve_authority()
         for group_name, administrator_list in authority_data.items():
             self.add_valve_authority(group_name, administrator_list)
 
@@ -57,6 +58,11 @@ class ValveServerSqlite:
             "INSERT INTO VALVE_AUTHORITY (GROUP_NAME,ADMINISTRATOR) VALUES (?,?);",
             (group_name, " ".join(administrator_list)),
         )
+        self.conn.commit()
+
+    # 删除权限表所有组
+    def del_valve_authority(self):
+        self.c.execute("DELETE FROM VALVE_AUTHORITY")
         self.conn.commit()
 
     # 添加服务器
