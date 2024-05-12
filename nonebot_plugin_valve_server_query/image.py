@@ -22,7 +22,7 @@ async def server_info_img(server_info: ServerInformationConfig) -> bytes:
     return await html_to_pic(
         html,
         wait=0,
-        viewport={"width": 500, "height": (len(server_info.players) + 1) * 35 + 480},
+        viewport={"width": 500, "height": len(server_info.players) * 25 + 290},
         type="jpeg",
     )
 
