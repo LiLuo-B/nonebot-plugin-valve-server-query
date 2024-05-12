@@ -9,51 +9,30 @@
 
 <body>
     <div class="glass-container">
-        <h1>{{server_info.game_name}}</h1>
-        <h1>{{server_info.server_name}}</h1>
-        <h2>服务器信息</h2>
-        <table>
-            <tr>
-                <th>
-                    <div class="label">地图</div>
-                </th>
-                <td id="server-map">{{server_info.map_name}}</td>
-            </tr>
-            <tr>
-                <th>延时</th>
-                <td id="server-latency">{{server_info.ping}}ms</td>
-            </tr>
-            <tr>
-                <th>版本号</th>
-                <td id="server-version">{{server_info.version}}</td>
-            </tr>
-            <tr>
-                <th>平台</th>
-                <td id="server-platform">{{server_info.platform}}</td>
-            </tr>
-            <tr>
-                <th>人数</th>
-                <td id="server-online-players">{{server_info.player_count}}/{{server_info.max_players}}</td>
-            </tr>
-        </table>
-
-        <h2>玩家信息</h2>
-
-        <table id="player-info">
-            <tr>
-                <th width="15%">分数</th>
-                <th width="25%">在线时长</th>
-            </tr>
-            <th width="60%">玩家名字</th>
-            {% for player in server_info.players %}
-            <tr>
-                <td>{{player.name}}</td>
-                <td>{{player.score}}</td>
-                <td>{{player.duration}}</td>
-            </tr>
-            {% endfor %}
-        </table>
+        <div class="game_name">{{server_info.game_name}}</div>
+        <div class="server_name">{{server_info.server_name}}</div>
+        <div class="server_info_container">
+            <div class="server_info_item">延时：{{server_info.ping}}ms</div>
+            <div class="server_info_item">版本：{{server_info.version}}</div>
+            <div class="server_info_item">平台：{{server_info.platform}}</div>
+            <div class="server_info_item">人数：{{server_info.player_count}}/{{server_info.max_players}}</div>
+            <div class="server_info_item_last">地图：{{server_info.map_name}}</div>
+        </div>
     </div>
+    <table id="player-info">
+        <tr>
+            <th width="15%">分数</th>
+            <th width="25%">在线时长</th>
+        </tr>
+        <th width="60%">玩家名字</th>
+        {% for player in server_info.players %}
+        <tr>
+            <td>{{player.name}}</td>
+            <td>{{player.score}}</td>
+            <td>{{player.duration}}</td>
+        </tr>
+        {% endfor %}
+    </table>
 
 </body>
 

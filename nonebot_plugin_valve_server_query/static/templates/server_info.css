@@ -40,32 +40,64 @@ body {
     background-image: url("../images/background.jpg");
 }
 
-.info-container {
-    background-color: rgba(255, 255, 255, 0.5);
-    /* background: linear-gradient(45deg, #e709e7, #0733f8); */
-    /* 半透明白色背景 */
+/* table {
+    width: 900px;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    /* 阴影效果 */
+    margin: auto;
+} */
+
+.game_name {
+    font-family: '700w-font';
+    text-align: center;
+    font-size: 32px;
+    padding-top: 20px;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
+.server_name {
+    font-family: '500w-font';
+    text-align: center;
+    padding-top: 10px;
+    height: 20px;
 }
 
-table,
+.server_info_container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.server_info_item {
+    width: calc(50% - 50px);
+    /* 每行两个元素，减去内边距的宽度 */
+}
+
+.server_info_item_last {
+    width: calc(100% - 50px);
+    margin-bottom: 15px;
+}
+
+.server_info_item,
+.server_info_item_last {
+    box-sizing: border-box;
+    margin-left: 25px;
+    margin-top: 10px;
+    font-family: '400w-font';
+}
+
+.group_info {}
+
+hr {
+    border-bottom: 3px solid white;
+}
+
 th,
 td {
-    border: 1px solid #ddd;
-}
-
-th,
-td {
-    padding: 10px;
+    font-family: '400w-font';
     text-align: left;
+}
+
+td {
+    padding-bottom: 10px;
+    height: 30px
 }
 
 th {
