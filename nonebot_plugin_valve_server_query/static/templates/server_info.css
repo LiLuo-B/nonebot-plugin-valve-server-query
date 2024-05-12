@@ -40,12 +40,6 @@ body {
     background-image: url("../images/background.jpg");
 }
 
-/* table {
-    width: 900px;
-    padding: 20px;
-    margin: auto;
-} */
-
 .game_name {
     font-family: '700w-font';
     text-align: center;
@@ -55,6 +49,7 @@ body {
 
 .server_name {
     font-family: '500w-font';
+    font-weight: bold;
     text-align: center;
     padding-top: 10px;
     height: 20px;
@@ -63,6 +58,10 @@ body {
 .server_info_container {
     display: flex;
     flex-wrap: wrap;
+}
+
+.server_info_label {
+    font-weight: bold;
 }
 
 .server_info_item {
@@ -78,46 +77,42 @@ body {
 .server_info_item,
 .server_info_item_last {
     box-sizing: border-box;
-    margin-left: 25px;
+    margin-left: 35px;
     margin-top: 10px;
     font-family: '400w-font';
 }
 
-.group_info {}
+.player_name {
+    width: 65%;
+}
+
+.player_score {
+    width: 10%;
+}
+
+.player_duration {
+    width: 25%;
+}
+
+
+table {
+    width: 400px;
+    padding: 10px;
+    margin: auto;
+}
 
 hr {
-    border-bottom: 3px solid white;
-}
-
-th,
-td {
-    font-family: '400w-font';
-    text-align: left;
-}
-
-td {
-    padding-bottom: 10px;
-    height: 30px
+    border-bottom: 1.5px solid white;
 }
 
 th {
     font-family: '400w-font';
+    text-align: left;
 }
 
 td {
     font-family: '300w-font';
-}
-
-label {
-    font-family: '400w-font';
-}
-
-h1 {
-    text-align: center;
-    font-family: '700w-font';
-}
-
-h2 {
     text-align: left;
-    font-family: '500w-font';
+    padding-bottom: 5px;
+    height: 15px
 }

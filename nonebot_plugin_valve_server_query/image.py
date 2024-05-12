@@ -15,7 +15,6 @@ env = jinja2.Environment(
 
 
 async def server_info_img(server_info: ServerInformationConfig) -> bytes:
-    print(templates_path)
     template = env.get_template("server_info.html")
     html = await template.render_async(
         resources_path=f"file://{resources_path}", server_info=server_info
