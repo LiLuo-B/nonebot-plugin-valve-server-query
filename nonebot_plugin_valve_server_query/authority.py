@@ -27,8 +27,16 @@ class ValveAuthorityJson:
             group_name_list.append(group_name)
         return group_name_list
 
-    def get_group_administrators(self, group_name) -> List[int]:
-        return [int(administrator) for administrator in self.authority_data[group_name]]
+    def get_group_administrators(self, group_name) -> List[str]:
+        return [administrator for administrator in self.authority_data[group_name]]
+
+    def get_all_administrators(self) -> List[str]:
+        group_name_list = self.get_group_name()
+        administrators = []
+        for group_name in group_name_list:
+            group_administrators = authority_json.get_group_administrators(group_name)
+            administrators.extend(group_administrators)
+        return administrators
 
 
 authority_json = ValveAuthorityJson()

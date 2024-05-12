@@ -1,4 +1,5 @@
 from nonebot.params import CommandArg, CommandStart, RawCommand
+from typing import List
 from .model import ServerInformationConfig
 from .queries import queries_server_info, queries_group_info
 from .check import is_valid_address, is_valid_port, is_valid_address_port
@@ -16,7 +17,18 @@ from nonebot.adapters.onebot.v11 import (
 )
 from nonebot.adapters.onebot.v11.message import Message
 
-l4d2_server_add = on_command("求生服添加")
+
+async def Permission_Check(event: Event):
+    administrators = authority_json.get_all_administrators()
+    if event.get_user_id() in administrators:
+        return True
+    return False
+
+
+l4d2_server_add = on_command(
+    "求生服添加",
+    permission=Permission_Check,
+)
 l4d2_server_list = on_command("求生服列表")
 l4d2_server_del = on_command("求生服删除")
 l4d2_server_update = on_command("求生服更新")
