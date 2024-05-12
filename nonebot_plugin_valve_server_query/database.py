@@ -1,12 +1,10 @@
 import json
 import sqlite3
-from typing import List
 from pathlib import Path
 from nonebot.log import logger
 
 valve_path = Path.cwd() / "data/valve"
 valve_db_path = valve_path / "server.db"
-json_path = valve_path / "authority.json"
 
 
 class ValveServerSqlite:
@@ -28,42 +26,13 @@ class ValveServerSqlite:
                 SERVER_PORT INTEGER NOT NULL
                 );"""
             )
-            self.c.execute(
-                """CREATE TABLE VALVE_AUTHORITY(
-                ID INTEGER     PRIMARY KEY NOT NULL,
-                GROUP_NAME     TEXT NOT NULL,
-                ADMINISTRATOR  TEXT NOT NULL
-                );"""
-            )
             logger.info("数据库初始化完成")
-        json_exist: bool = Path(json_path).exists()
-        if json_exist == True:
-            logger.info("配置文件存在,正在加载权限配置")
-            with open(json_path, "r") as json_file:
-                authority_data = json.load(json_file)
-        else:
-            logger.info("配置文件不存在，请配置")
-            authority_data = {}
-            with open(json_path, "w") as json_file:
-                json.dump(authority_data, json_file, ensure_ascii=False)
         self.conn = sqlite3.connect(valve_db_path)
         self.c = self.conn.cursor()
-        self.del_valve_authority()
-        for group_name, administrator_list in authority_data.items():
-            self.add_valve_authority(group_name, administrator_list)
 
-    # 添加组名与权限
-    def add_valve_authority(self, group_name: str, administrator_list: List[str]):
-        self.c.execute(
-            "INSERT INTO VALVE_AUTHORITY (GROUP_NAME,ADMINISTRATOR) VALUES (?,?);",
-            (group_name, " ".join(administrator_list)),
-        )
-        self.conn.commit()
-
-    # 删除权限表所有组
-    def del_valve_authority(self):
-        self.c.execute("DELETE FROM VALVE_AUTHORITY")
-        self.conn.commit()
+    def get_valve_group_list(self):
+        cursor = self.c.execute("SELECT DISTINCT GROUP_NAME FROM VALVE_AUTHORITY;")
+        return cursor.fetchall()
 
     # 添加服务器
     def add_l4d2_server(

@@ -5,6 +5,7 @@ from .check import is_valid_address, is_valid_port, is_valid_address_port
 from .database import valve_db
 from .image import server_info_img, group_info_img
 from .file import get_file_info, is_json_file, parse_json_file
+from .authority import authority_json
 
 from nonebot import on_command, on_message
 from nonebot.adapters.onebot.v11 import (
@@ -21,7 +22,7 @@ l4d2_server_del = on_command("求生服删除")
 l4d2_server_update = on_command("求生服更新")
 l4d2_server_queries = on_command(
     "connect",
-    aliases={server_group[0] for server_group in valve_db.get_l4d2_groups_name()},
+    aliases={group_name for group_name in authority_json.get_group_name()},
 )
 
 
