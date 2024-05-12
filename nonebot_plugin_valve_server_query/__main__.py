@@ -163,8 +163,14 @@ async def _(
                     if server_info == False:
                         await l4d2_server_queries.finish("服务器无响应")
                     img = await server_info_img(server_info)
-                    await l4d2_server_queries.send(MessageSegment.image(img))
-                    await l4d2_server_queries.finish(f"connect {ip_port}")
+                    await l4d2_server_queries.finish(
+                        Message(
+                            [
+                                MessageSegment.text(f"connect {ip_port}"),
+                                MessageSegment.image(img),
+                            ]
+                        )
+                    )
                 else:
                     await l4d2_server_queries.finish("该ID不存在")
             else:
