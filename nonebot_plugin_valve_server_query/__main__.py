@@ -2,7 +2,7 @@ from nonebot.params import CommandArg, CommandStart, RawCommand
 from .model import ServerInformationConfig
 from .queries import queries_server_info, queries_group_info
 from .check import is_valid_address, is_valid_port, is_valid_address_port
-from .database import sq_L4D2
+from .database import valve_db
 from .image import server_info_img, group_info_img
 from .file import get_file_info, is_json_file, parse_json_file
 
@@ -21,7 +21,7 @@ l4d2_server_del = on_command("求生服删除")
 l4d2_server_update = on_command("求生服更新")
 l4d2_server_queries = on_command(
     "connect",
-    aliases={server_group[0] for server_group in sq_L4D2.get_l4d2_groups_name()},
+    aliases={server_group[0] for server_group in valve_db.get_l4d2_groups_name()},
 )
 
 
@@ -37,10 +37,10 @@ async def _(args: Message = CommandArg()):
                 if is_valid_address(server_ip := data_list[2]):
                     server_port = data_list[3]
                     if is_valid_port(server_port):
-                        if sq_L4D2.judge_l4d2_server(group_name, server_id):
+                        if valve_db.judge_l4d2_server(group_name, server_id):
                             await l4d2_server_add.finish("该ID已存在")
                         else:
-                            sq_L4D2.add_l4d2_server(
+                            valve_db.add_l4d2_server(
                                 group_name, server_id, server_ip, server_port
                             )
                             await l4d2_server_add.finish("添加成功")
@@ -62,7 +62,7 @@ async def _(args: Message = CommandArg()):
 async def _(args: Message = CommandArg()):
     if data := args.extract_plain_text():
         group_name: str = data
-        servers_info: list = sq_L4D2.get_l4d2_servers(group_name)
+        servers_info: list = valve_db.get_l4d2_servers(group_name)
         if servers_info:
             message_text = ""
             for server_info in servers_info:
@@ -83,11 +83,11 @@ async def _(args: Message = CommandArg()):
             server_id_str: str = data_list[1]
             if server_id_str.isdigit():
                 server_id = int(server_id_str)
-                servers_info: list = sq_L4D2.get_l4d2_servers(group_name)
+                servers_info: list = valve_db.get_l4d2_servers(group_name)
                 if servers_info:
                     for server_info in servers_info:
                         if server_info[0] == server_id:
-                            sq_L4D2.del_l4d2_server(group_name, server_id)
+                            valve_db.del_l4d2_server(group_name, server_id)
                             await l4d2_server_del.finish("删除成功")
                     await l4d2_server_del.finish("该ID不存在")
                 else:
@@ -112,8 +112,8 @@ async def _(args: Message = CommandArg()):
                 if is_valid_address(server_ip := data_list[2]):
                     server_port = data_list[3]
                     if is_valid_port(server_port):
-                        if sq_L4D2.judge_l4d2_server(group_name, server_id):
-                            sq_L4D2.update_l4d2_server(
+                        if valve_db.judge_l4d2_server(group_name, server_id):
+                            valve_db.update_l4d2_server(
                                 group_name, server_id, server_ip, server_port
                             )
                             await l4d2_server_update.finish("更新成功")
@@ -158,7 +158,7 @@ async def _(
         # 判断前缀为已录入的服组+id
         else:
             if msg.isdigit():
-                if ip_port := sq_L4D2.get_l4d2_server_ip(raw_command, int(msg)):
+                if ip_port := valve_db.get_l4d2_server_ip(raw_command, int(msg)):
                     server_info = await queries_server_info(ip_port)
                     if server_info == False:
                         await l4d2_server_queries.finish("服务器无响应")

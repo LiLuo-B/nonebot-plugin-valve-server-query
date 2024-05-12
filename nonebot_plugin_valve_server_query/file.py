@@ -1,7 +1,7 @@
 import re
 import json
 from .model import CQFile
-from .database import sq_L4D2
+from .database import valve_db
 from typing import Optional, List, Tuple
 
 
@@ -26,7 +26,7 @@ def parse_json_file(
 ) -> Optional[List[Tuple[str, bool, int, int, int, int]]]:
     json_flie = open(file_path, "r")
     content = json_flie.read()
-    groups_name = [group_name[0] for group_name in sq_L4D2.get_l4d2_groups_name()]
+    groups_name = [group_name[0] for group_name in valve_db.get_l4d2_groups_name()]
     groups_info = []
     try:
         json_data = json.loads(content)
@@ -39,7 +39,7 @@ def parse_json_file(
                 is_exists = True
             else:
                 is_exists = False
-            old_id_list = [id[0] for id in sq_L4D2.get_l4d2_server_ids(key)]
+            old_id_list = [id[0] for id in valve_db.get_l4d2_server_ids(key)]
             ip_count = 0
             id_list = []
             ip_list = []
@@ -55,15 +55,15 @@ def parse_json_file(
             ids_add = list(id_set - old_id_set)
             ids_del = list(old_id_set - id_set)
             for id in ids_del:
-                sq_L4D2.del_l4d2_server(key, id)
+                valve_db.del_l4d2_server(key, id)
             for id in ids_update:
                 ip_port = ip_list[id_list.index(id)]
                 ip, port = ip_port.split(":")
-                sq_L4D2.update_l4d2_server(key, id, ip, port)
+                valve_db.update_l4d2_server(key, id, ip, port)
             for id in ids_add:
                 ip_port = ip_list[id_list.index(id)]
                 ip, port = ip_port.split(":")
-                sq_L4D2.add_l4d2_server(key, id, ip, port)
+                valve_db.add_l4d2_server(key, id, ip, port)
             groups_info.append(
                 (key, is_exists, ip_count, len(ids_add), len(ids_del), len(ids_update))
             )

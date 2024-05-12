@@ -1,7 +1,7 @@
 from a2s import ainfo, aplayers, SourceInfo, Player
 from .model import ServerInformationConfig, PlayerInformationConfig
 from asyncio.exceptions import TimeoutError
-from .database import sq_L4D2
+from .database import valve_db
 import asyncio
 
 
@@ -75,7 +75,7 @@ async def queries_info(
 async def queries_group_info(
     group_name: str,
 ) -> list[tuple[int, ServerInformationConfig | None]]:
-    server_list = sq_L4D2.get_l4d2_servers(group_name)
+    server_list = valve_db.get_l4d2_servers(group_name)
     tasks = [queries_info(id, ip, port) for id, ip, port in server_list]
     result = await asyncio.gather(*tasks, return_exceptions=True)
     return result
