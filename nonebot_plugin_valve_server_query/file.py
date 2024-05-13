@@ -62,8 +62,6 @@ def parse_json_file(
         if not isinstance(json_data, dict):
             return None
         for key, value in json_data.items():
-            print(key)
-            print(authority_json.get_group_administrators(key))
             if not isinstance(
                 value, list
             ) or user_id not in authority_json.get_group_administrators(key):
