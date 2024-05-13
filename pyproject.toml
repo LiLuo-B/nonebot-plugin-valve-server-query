@@ -1,14 +1,40 @@
 [project]
 name = "nonebot-plugin-valve-server-query"
-version = "0.1.0"
+version = "0.5.1"
 description = "nonebot-plugin-valve-server-query"
 readme = "README.md"
 requires-python = ">=3.8, <4.0"
 
 [tool.nonebot]
 adapters = [
-    { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" }
+    { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" },
 ]
 plugins = ["nonebot_plugin_valve_server_query"]
 plugin_dirs = []
 builtin_plugins = []
+
+[tool.poetry]
+name = "nonebot-plugin-valve-server-query"
+version = "0.5.1"
+description = "Valve server query plugin for NoneBot2"
+authors = ["LiLuo-B"]
+license = "GPLv3"
+readme = "README.md"
+repository = "https://github.com/LiLuo-B/nonebot-plugin-valve-server-query"
+documentation = "https://github.com/LiLuo-B/nonebot-plugin-valve-server-query/blob/main/README.md"
+[tool.poetry.dependencies]
+python = ">=3.8,<4.0"
+dependencies = [
+    "nonebot2>=2.0.0",
+    "nonebot-plugin-htmlrender==0.3.1",
+    "nonebot-adapter-onebot>=2.2.3",
+    "aiohttp>=3.9.5",
+    "jinja2>=3.1.4",
+    "python-a2s>=1.3.0",
+]
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
