@@ -116,16 +116,17 @@ async def _(event: Event, args: Message = CommandArg()):
 async def _(args: Message = CommandArg()):
     if data := args.extract_plain_text():
         group_name: str = data
-        servers_info: list = valve_db.get_valve_servers(group_name)
-        if servers_info:
-            message_text = ""
-            for server_info in servers_info:
-                message_text += (
-                    f"id:{server_info[0]} 地址:{server_info[1]}:{server_info[2]}\n"
-                )
-            await valve_server_list.finish(message_text)
-        else:
-            await valve_server_list.finish("该组不存在")
+        if group_name in authority_json.get_group_name():
+            servers_info: list = valve_db.get_valve_servers(group_name)
+            if servers_info:
+                message_text = ""
+                for server_info in servers_info:
+                    message_text += (
+                        f"id:{server_info[0]} 地址:{server_info[1]}:{server_info[2]}\n"
+                    )
+                await valve_server_list.finish(message_text)
+            await valve_server_list.finish("还没有添加服务器")
+        await valve_server_list.finish("该组不存在")
 
 
 @valve_server_del.handle()
@@ -159,12 +160,8 @@ async def _(event: Event, args: Message = CommandArg()):
                 if not valve_db.judge_valve_server(group_name, server_id):
                     await valve_server_del.finish("该ID不存在")
                 else:
-                    valve_db.del_valve_server(
-                        group_name, server_id
-                    )
-                    await valve_server_del.finish(
-                        f"删除成功，组名：{group_name}"
-                    )
+                    valve_db.del_valve_server(group_name, server_id)
+                    await valve_server_del.finish(f"删除成功，组名：{group_name}")
             else:
                 await valve_server_del.finish("ID应为整数")
         elif len(data_list) != 1 and not user_judge:
