@@ -25,29 +25,33 @@ async def Permission_Check(event: Event):
     return False
 
 
-l4d2_server_add = on_command(
-    "求生服添加",
+valve_server_add = on_command(
+    "a2s添加",
+    aliases={"A2s添加", "A2S添加"},
     permission=Permission_Check | SUPERUSER,
 )
-l4d2_server_list = on_command(
-    "求生服列表",
+valve_server_list = on_command(
+    "a2s列表",
+    aliases={"A2s列表", "A2S列表"},
     permission=Permission_Check | SUPERUSER,
 )
-l4d2_server_del = on_command(
-    "求生服删除",
+valve_server_del = on_command(
+    "a2s删除",
+    aliases={"A2s删除","A2S删除"},
     permission=Permission_Check | SUPERUSER,
 )
-l4d2_server_update = on_command(
-    "求生服更新",
+valve_server_update = on_command(
+    "a2s更新",
+    aliases={"A2s更新","A2S更新"},
     permission=Permission_Check | SUPERUSER,
 )
-l4d2_server_queries = on_command(
+valve_server_queries = on_command(
     "connect",
     aliases={group_name for group_name in authority_json.get_group_name()},
 )
 
 
-@l4d2_server_add.handle()
+@valve_server_add.handle()
 async def _(args: Message = CommandArg()):
     if data := args.extract_plain_text():
         data_list: list = data.split()
@@ -59,44 +63,44 @@ async def _(args: Message = CommandArg()):
                 if is_valid_address(server_ip := data_list[2]):
                     server_port = data_list[3]
                     if is_valid_port(server_port):
-                        if valve_db.judge_l4d2_server(group_name, server_id):
-                            await l4d2_server_add.finish("该ID已存在")
+                        if valve_db.judge_valve_server(group_name, server_id):
+                            await valve_server_add.finish("该ID已存在")
                         else:
-                            valve_db.add_l4d2_server(
+                            valve_db.add_valve_server(
                                 group_name, server_id, server_ip, server_port
                             )
-                            await l4d2_server_add.finish("添加成功")
+                            await valve_server_add.finish("添加成功")
                     else:
-                        await l4d2_server_add.finish("端口号错误")
+                        await valve_server_add.finish("端口号错误")
                 else:
-                    await l4d2_server_add.finish("IP错误")
+                    await valve_server_add.finish("IP错误")
             else:
-                await l4d2_server_add.finish("ID应为整数")
+                await valve_server_add.finish("ID应为整数")
         else:
-            await l4d2_server_add.finish("参数数量错误（呆呆 1 127.0.0.1 25535）")
+            await valve_server_add.finish("参数数量错误（呆呆 1 127.0.0.1 25535）")
     else:
-        await l4d2_server_add.finish(
+        await valve_server_add.finish(
             "请输入组名、ID、IP、端口号（呆呆 1 127.0.0.1 25535）"
         )
 
 
-@l4d2_server_list.handle()
+@valve_server_list.handle()
 async def _(args: Message = CommandArg()):
     if data := args.extract_plain_text():
         group_name: str = data
-        servers_info: list = valve_db.get_l4d2_servers(group_name)
+        servers_info: list = valve_db.get_valve_servers(group_name)
         if servers_info:
             message_text = ""
             for server_info in servers_info:
                 message_text += (
                     f"id:{server_info[0]} 地址:{server_info[1]}:{server_info[2]}\n"
                 )
-            await l4d2_server_list.finish(message_text)
+            await valve_server_list.finish(message_text)
         else:
-            await l4d2_server_list.finish("该组不存在")
+            await valve_server_list.finish("该组不存在")
 
 
-@l4d2_server_del.handle()
+@valve_server_del.handle()
 async def _(args: Message = CommandArg()):
     if data := args.extract_plain_text():
         data_list: list = data.split()
@@ -105,24 +109,24 @@ async def _(args: Message = CommandArg()):
             server_id_str: str = data_list[1]
             if server_id_str.isdigit():
                 server_id = int(server_id_str)
-                servers_info: list = valve_db.get_l4d2_servers(group_name)
+                servers_info: list = valve_db.get_valve_servers(group_name)
                 if servers_info:
                     for server_info in servers_info:
                         if server_info[0] == server_id:
-                            valve_db.del_l4d2_server(group_name, server_id)
-                            await l4d2_server_del.finish("删除成功")
-                    await l4d2_server_del.finish("该ID不存在")
+                            valve_db.del_valve_server(group_name, server_id)
+                            await valve_server_del.finish("删除成功")
+                    await valve_server_del.finish("该ID不存在")
                 else:
-                    await l4d2_server_del.finish("该组不存在")
+                    await valve_server_del.finish("该组不存在")
             else:
-                await l4d2_server_del.finish("ID应为整数")
+                await valve_server_del.finish("ID应为整数")
         else:
-            await l4d2_server_del.finish("参数数量错误（呆呆 1）")
+            await valve_server_del.finish("参数数量错误（呆呆 1）")
     else:
-        await l4d2_server_del.finish("请输入组名、ID（呆呆 1或呆呆 1 2 3 4）")
+        await valve_server_del.finish("请输入组名、ID（呆呆 1或呆呆 1 2 3 4）")
 
 
-@l4d2_server_update.handle()
+@valve_server_update.handle()
 async def _(args: Message = CommandArg()):
     if data := args.extract_plain_text():
         data_list: list = data.split()
@@ -134,28 +138,28 @@ async def _(args: Message = CommandArg()):
                 if is_valid_address(server_ip := data_list[2]):
                     server_port = data_list[3]
                     if is_valid_port(server_port):
-                        if valve_db.judge_l4d2_server(group_name, server_id):
-                            valve_db.update_l4d2_server(
+                        if valve_db.judge_valve_server(group_name, server_id):
+                            valve_db.update_valve_server(
                                 group_name, server_id, server_ip, server_port
                             )
-                            await l4d2_server_update.finish("更新成功")
+                            await valve_server_update.finish("更新成功")
                         else:
-                            await l4d2_server_update.finish("该ID不存在")
+                            await valve_server_update.finish("该ID不存在")
                     else:
-                        await l4d2_server_update.finish("端口号错误")
+                        await valve_server_update.finish("端口号错误")
                 else:
-                    await l4d2_server_update.finish("IP错误")
+                    await valve_server_update.finish("IP错误")
             else:
-                await l4d2_server_update.finish("ID应为整数")
+                await valve_server_update.finish("ID应为整数")
         else:
-            await l4d2_server_update.finish("参数数量错误（呆呆 1 127.0.0.1 25535）")
+            await valve_server_update.finish("参数数量错误（呆呆 1 127.0.0.1 25535）")
     else:
-        await l4d2_server_update.finish(
+        await valve_server_update.finish(
             "请输入组名、ID、IP、端口号（呆呆 1 127.0.0.1 25535）"
         )
 
 
-@l4d2_server_queries.handle()
+@valve_server_queries.handle()
 async def _(
     command_start: str = CommandStart(),
     raw_command: str = RawCommand(),
@@ -172,20 +176,20 @@ async def _(
                 if judge:
                     server_info: ServerInformationConfig = judge
                     img = await server_info_img(server_info)
-                    await l4d2_server_queries.finish(MessageSegment.image(img))
+                    await valve_server_queries.finish(MessageSegment.image(img))
                 else:
-                    await l4d2_server_queries.finish("服务器无响应")
+                    await valve_server_queries.finish("服务器无响应")
             else:
-                await l4d2_server_queries.finish()
+                await valve_server_queries.finish()
         # 判断前缀为已录入的服组+id
         else:
             if msg.isdigit():
-                if ip_port := valve_db.get_l4d2_server_ip(raw_command, int(msg)):
+                if ip_port := valve_db.get_valve_server_ip(raw_command, int(msg)):
                     server_info = await queries_server_info(ip_port)
                     if server_info == False:
-                        await l4d2_server_queries.finish("服务器无响应")
+                        await valve_server_queries.finish("服务器无响应")
                     img = await server_info_img(server_info)
-                    await l4d2_server_queries.finish(
+                    await valve_server_queries.finish(
                         Message(
                             [
                                 MessageSegment.text(f"connect {ip_port}"),
@@ -194,9 +198,9 @@ async def _(
                         )
                     )
                 else:
-                    await l4d2_server_queries.finish("该ID不存在")
+                    await valve_server_queries.finish("该ID不存在")
             else:
-                await l4d2_server_queries.finish()
+                await valve_server_queries.finish()
     # 判断前缀为已录入的服组
     else:
         group_info = await queries_group_info(raw_command)
@@ -220,7 +224,7 @@ async def _(
             player_online_count,
             group_info,
         )
-        await l4d2_server_queries.finish(MessageSegment.image(img))
+        await valve_server_queries.finish(MessageSegment.image(img))
 
 
 def _rule(event: Event):

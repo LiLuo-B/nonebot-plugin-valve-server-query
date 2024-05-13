@@ -65,7 +65,7 @@ def parse_json_file(
                 is_exists = True
             else:
                 is_exists = False
-            old_id_list = [id[0] for id in valve_db.get_l4d2_server_ids(key)]
+            old_id_list = [id[0] for id in valve_db.get_valve_server_ids(key)]
             ip_count = 0
             id_list = []
             ip_list = []
@@ -81,15 +81,15 @@ def parse_json_file(
             ids_add = list(id_set - old_id_set)
             ids_del = list(old_id_set - id_set)
             for id in ids_del:
-                valve_db.del_l4d2_server(key, id)
+                valve_db.del_valve_server(key, id)
             for id in ids_update:
                 ip_port = ip_list[id_list.index(id)]
                 ip, port = ip_port.split(":")
-                valve_db.update_l4d2_server(key, id, ip, port)
+                valve_db.update_valve_server(key, id, ip, port)
             for id in ids_add:
                 ip_port = ip_list[id_list.index(id)]
                 ip, port = ip_port.split(":")
-                valve_db.add_l4d2_server(key, id, ip, port)
+                valve_db.add_valve_server(key, id, ip, port)
             groups_info.append(
                 (key, is_exists, ip_count, len(ids_add), len(ids_del), len(ids_update))
             )

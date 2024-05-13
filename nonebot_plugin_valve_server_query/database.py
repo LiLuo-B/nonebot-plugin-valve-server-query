@@ -35,7 +35,7 @@ class ValveServerSqlite:
         return cursor.fetchall()
 
     # 添加服务器
-    def add_l4d2_server(
+    def add_valve_server(
         self, group_name: str, server_id: int, server_ip: str, server_port: int
     ):
         self.c.execute(
@@ -44,7 +44,7 @@ class ValveServerSqlite:
         )
         self.conn.commit()
 
-    def update_l4d2_server(
+    def update_valve_server(
         self, group_name: str, server_id: int, server_ip: str, server_port: int
     ):
         self.c.execute(
@@ -53,19 +53,19 @@ class ValveServerSqlite:
         )
         self.conn.commit()
 
-    def del_l4d2_server(self, group_name: str, server_id: int):
+    def del_valve_server(self, group_name: str, server_id: int):
         self.c.execute(
             "DELETE FROM VALVE_SERVER WHERE GROUP_NAME=? AND SERVER_ID=?;",
             (group_name, server_id),
         )
         self.conn.commit()
 
-    def del_l4d2_servers(self, group_name: str, server_ids: list[int]):
+    def del_valve_servers(self, group_name: str, server_ids: list[int]):
         for server_id in server_ids:
-            self.del_l4d2_server(group_name, server_id)
+            self.del_valve_server(group_name, server_id)
 
     # 删除服务器组的所有服务器
-    def del_l4d2_group(self, group_name: str):
+    def del_valve_group(self, group_name: str):
         self.c.execute(
             "DELETE FROM VALVE_SERVER WHERE GROUP_NAME=?;",
             (group_name,),
@@ -73,7 +73,7 @@ class ValveServerSqlite:
         self.conn.commit()
 
     # 判断服务器是否存在
-    def judge_l4d2_server(self, group_name: str, server_id: int) -> bool:
+    def judge_valve_server(self, group_name: str, server_id: int) -> bool:
         cursor = self.c.execute(
             "SELECT GROUP_NAME,SERVER_ID FROM VALVE_SERVER WHERE GROUP_NAME=? AND SERVER_ID=?;",
             (group_name, server_id),
@@ -81,7 +81,7 @@ class ValveServerSqlite:
         return bool(cursor.fetchall())
 
     # 获取服务器指定ID对应的ip
-    def get_l4d2_server_ip(self, group_name: str, server_id: int) -> str | None:
+    def get_valve_server_ip(self, group_name: str, server_id: int) -> str | None:
         cursor = self.c.execute(
             "SELECT SERVER_IP,SERVER_PORT FROM VALVE_SERVER WHERE GROUP_NAME=? AND SERVER_ID=?;",
             (group_name, server_id),
@@ -93,7 +93,7 @@ class ValveServerSqlite:
             return None
 
     # 获取指定服务器组的所有服务器地址
-    def get_l4d2_servers(self, group_name: str) -> list:
+    def get_valve_servers(self, group_name: str) -> list:
         cursor = self.c.execute(
             "SELECT SERVER_ID,SERVER_IP,SERVER_PORT FROM VALVE_SERVER WHERE GROUP_NAME=? ORDER BY SERVER_ID;",
             (group_name,),
@@ -101,7 +101,7 @@ class ValveServerSqlite:
         return cursor.fetchall()
 
     # 获取指定服务器组的所有服务器ID
-    def get_l4d2_server_ids(self, group_name: str) -> list:
+    def get_valve_server_ids(self, group_name: str) -> list:
         cursor = self.c.execute(
             "SELECT SERVER_ID FROM VALVE_SERVER WHERE GROUP_NAME=?;",
             (group_name,),
@@ -109,7 +109,7 @@ class ValveServerSqlite:
         return cursor.fetchall()
 
     # 获取所有服务器组名
-    def get_l4d2_groups_name(self) -> list:
+    def get_valve_groups_name(self) -> list:
         cursor = self.c.execute("SELECT DISTINCT GROUP_NAME FROM VALVE_SERVER;")
         return cursor.fetchall()
 
