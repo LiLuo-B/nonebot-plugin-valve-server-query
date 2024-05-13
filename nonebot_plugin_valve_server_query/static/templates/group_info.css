@@ -1,21 +1,21 @@
 @font-face {
     font-family: '700w-font';
-    src: url('../fonts/江城圆体\ 700W.ttf') format('truetype');
+    src: url('../fonts/f700W.ttf') format('truetype');
 }
 
 @font-face {
     font-family: '500w-font';
-    src: url('../fonts/江城圆体\ 500W.ttf') format('truetype');
+    src: url('../fonts/f500W.ttf') format('truetype');
 }
 
 @font-face {
     font-family: '400w-font';
-    src: url('../fonts/江城圆体\ 400W.ttf') format('truetype');
+    src: url('../fonts/f400W.ttf') format('truetype');
 }
 
 @font-face {
     font-family: '300w-font';
-    src: url('../fonts/江城圆体\ 300W.ttf') format('truetype');
+    src: url('../fonts/f300W.ttf') format('truetype');
 }
 
 body {

@@ -1,5 +1,3 @@
-from nonebot.params import CommandArg, CommandStart, RawCommand
-from typing import List
 from .model import ServerInformationConfig
 from .queries import queries_server_info, queries_group_info
 from .check import is_valid_address, is_valid_port, is_valid_address_port
@@ -7,10 +5,9 @@ from .database import valve_db
 from .image import server_info_img, group_info_img
 from .file import get_file_info, is_json_file, parse_json_file, get_file_url, url_to_msg
 from .authority import authority_json
-import json
-from typing import Dict
-
 from nonebot import on_command, on_message, on_notice
+from nonebot.permission import SUPERUSER
+from nonebot.params import CommandArg, CommandStart, RawCommand
 from nonebot.adapters.onebot.v11 import (
     MessageSegment,
     Event,
@@ -30,11 +27,20 @@ async def Permission_Check(event: Event):
 
 l4d2_server_add = on_command(
     "求生服添加",
-    permission=Permission_Check,
+    permission=Permission_Check | SUPERUSER,
 )
-l4d2_server_list = on_command("求生服列表")
-l4d2_server_del = on_command("求生服删除")
-l4d2_server_update = on_command("求生服更新")
+l4d2_server_list = on_command(
+    "求生服列表",
+    permission=Permission_Check | SUPERUSER,
+)
+l4d2_server_del = on_command(
+    "求生服删除",
+    permission=Permission_Check | SUPERUSER,
+)
+l4d2_server_update = on_command(
+    "求生服更新",
+    permission=Permission_Check | SUPERUSER,
+)
 l4d2_server_queries = on_command(
     "connect",
     aliases={group_name for group_name in authority_json.get_group_name()},
