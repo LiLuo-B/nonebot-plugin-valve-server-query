@@ -102,13 +102,13 @@ _✨ NoneBot查服插件，可用于查询V社的游戏服务器，支持不同�
 
 ### 查组
 
-<img src="resources/group_queries.png" width="800"></img>
+<img src="https://github.com/LiLuo-B/nonebot-plugin-valve-server-query/blob/main/resources/group_queries.png" width="800"></img>
 
 ### 查服
 
-<img src="resources/server_queries1.png" width="800"></img>
+<img src="https://github.com/LiLuo-B/nonebot-plugin-valve-server-query/blob/main/resources/server_queries1.png" width="800"></img>
 
-<img src="resources/server_queries2.png" width="800"></img>
+<img src="https://github.com/LiLuo-B/nonebot-plugin-valve-server-query/blob/main/resources/server_queries2.png" width="800"></img>
 
 ### json快捷更新
 
