@@ -38,5 +38,18 @@ class ValveAuthorityJson:
             administrators.extend(group_administrators)
         return administrators
 
+    def get_administrator_group(self, administrator_id: str) -> str:
+        for group_name, administrators in self.authority_data.items():
+            if administrator_id in administrators:
+                return group_name
+        return None
+
+    # 判断用户是否有多个组的权限
+    def judge_administrators_server_num(self, administrator_id: str) -> bool:
+        administrator_count = self.get_all_administrators().count(administrator_id)
+        if administrator_count > 1:
+            return True
+        return False
+
 
 authority_json = ValveAuthorityJson()

@@ -6,7 +6,6 @@ from .image import server_info_img, group_info_img
 from .file import get_file_info, is_json_file, parse_json_file, get_file_url, url_to_msg
 from .authority import authority_json
 from nonebot import on_command, on_message, on_notice
-from nonebot.permission import SUPERUSER
 from nonebot.params import CommandArg, CommandStart, RawCommand
 from nonebot.adapters.onebot.v11 import (
     MessageSegment,
@@ -28,22 +27,22 @@ async def Permission_Check(event: Event):
 valve_server_add = on_command(
     "a2s添加",
     aliases={"A2s添加", "A2S添加"},
-    permission=Permission_Check | SUPERUSER,
+    permission=Permission_Check,
 )
 valve_server_list = on_command(
     "a2s列表",
     aliases={"A2s列表", "A2S列表"},
-    permission=Permission_Check | SUPERUSER,
+    permission=Permission_Check,
 )
 valve_server_del = on_command(
     "a2s删除",
-    aliases={"A2s删除","A2S删除"},
-    permission=Permission_Check | SUPERUSER,
+    aliases={"A2s删除", "A2S删除"},
+    permission=Permission_Check,
 )
 valve_server_update = on_command(
     "a2s更新",
-    aliases={"A2s更新","A2S更新"},
-    permission=Permission_Check | SUPERUSER,
+    aliases={"A2s更新", "A2S更新"},
+    permission=Permission_Check,
 )
 valve_server_queries = on_command(
     "connect",
@@ -52,10 +51,12 @@ valve_server_queries = on_command(
 
 
 @valve_server_add.handle()
-async def _(args: Message = CommandArg()):
+async def _(event: Event, args: Message = CommandArg()):
+    user_id = event.get_user_id()
+    user_judge = authority_json.judge_administrators_server_num(user_id)
     if data := args.extract_plain_text():
         data_list: list = data.split()
-        if len(data_list) == 4:
+        if len(data_list) == 4 and user_judge:
             group_name: str = data_list[0]
             server_id_str: str = data_list[1]
             if server_id_str.isdigit():
@@ -69,19 +70,45 @@ async def _(args: Message = CommandArg()):
                             valve_db.add_valve_server(
                                 group_name, server_id, server_ip, server_port
                             )
-                            await valve_server_add.finish("添加成功")
+                            await valve_server_add.finish(
+                                f"添加成功，组名：{group_name}"
+                            )
                     else:
                         await valve_server_add.finish("端口号错误")
                 else:
                     await valve_server_add.finish("IP错误")
             else:
                 await valve_server_add.finish("ID应为整数")
-        else:
+        elif len(data_list) != 4 and user_judge:
             await valve_server_add.finish("参数数量错误（呆呆 1 127.0.0.1 25535）")
+        elif len(data_list) == 3 and not user_judge:
+            group_name = authority_json.get_administrator_group(user_id)
+            server_id_str: str = data_list[0]
+            print(server_id_str)
+            if server_id_str.isdigit():
+                server_id = int(server_id_str)
+                if is_valid_address(server_ip := data_list[1]):
+                    server_port = data_list[2]
+                    if is_valid_port(server_port):
+                        if valve_db.judge_valve_server(group_name, server_id):
+                            await valve_server_add.finish("该ID已存在")
+                        else:
+                            valve_db.add_valve_server(
+                                group_name, server_id, server_ip, server_port
+                            )
+                            await valve_server_add.finish(
+                                f"添加成功，组名：{group_name}"
+                            )
+                    else:
+                        await valve_server_add.finish("端口号错误")
+                else:
+                    await valve_server_add.finish("IP错误")
+            else:
+                await valve_server_add.finish("ID应为整数")
+        elif len(data_list) != 3 and not user_judge:
+            await valve_server_add.finish("参数数量错误（1 127.0.0.1 25535）")
     else:
-        await valve_server_add.finish(
-            "请输入组名、ID、IP、端口号（呆呆 1 127.0.0.1 25535）"
-        )
+        await valve_server_add.finish()
 
 
 @valve_server_list.handle()
