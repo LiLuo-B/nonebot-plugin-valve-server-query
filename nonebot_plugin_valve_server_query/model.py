@@ -7,6 +7,7 @@ class PlayerInformationConfig(BaseModel):
     score: int
     duration: str
 
+
 class ServerInformationConfig(BaseModel):
     game_name: str
     server_name: str
@@ -19,7 +20,13 @@ class ServerInformationConfig(BaseModel):
     players: Optional[List[PlayerInformationConfig]] = []
 
 
-class CQFile(BaseModel):
+class IDFile(BaseModel):
     file_name: str
     file_id: str
+    file_size: int
+
+
+class URLFile(BaseModel):
+    file_name: str
+    file_url: str
     file_size: int

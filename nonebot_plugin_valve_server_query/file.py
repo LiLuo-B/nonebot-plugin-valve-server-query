@@ -1,11 +1,37 @@
 import re
 import json
-from .model import CQFile
+import aiohttp
+from .model import URLFile, IDFile
 from .database import valve_db
 from typing import Optional, List, Tuple
 
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0",  # noqa: E501
+}
 
-def get_file_info(CQ_code: str) -> Optional[CQFile]:
+async def url_to_msg(url: str):
+    """获取URL数据的字节流"""
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, headers=headers, timeout=600) as response:
+            if response.status == 200:
+                return await response.text()
+            return None
+
+
+# 获取文件url
+def get_file_url(message_info: dict) -> Optional[URLFile]:
+    if message_info["notice_type"] == "offline_file":
+        file_info: dict = message_info["file"]
+        return URLFile(
+            file_name=file_info["name"],
+            file_url=file_info["url"],
+            file_size=file_info["size"],
+        )
+    return None
+
+
+# 获取文件信息（根据id）
+def get_file_info(CQ_code: str) -> Optional[IDFile]:
     match = re.search(r"CQ:([^,]+)", CQ_code)
     if match:
         CQ_type = match.group(1)
@@ -13,14 +39,16 @@ def get_file_info(CQ_code: str) -> Optional[CQFile]:
             file_name = re.search(r"file=([^,]+)", CQ_code).group(1)
             file_id = re.search(r"file_id=([^,]+)", CQ_code).group(1)
             file_size = re.search(r"file_size=(\d+)", CQ_code).group(1)
-            return CQFile(file_name=file_name, file_id=file_id, file_size=file_size)
+            return IDFile(file_name=file_name, file_id=file_id, file_size=file_size)
     return None
 
 
+# 判断是否为json
 def is_json_file(filename: str) -> bool:
     return bool(re.match(r".*\.json$", filename, re.IGNORECASE))
 
 
+# 解析json
 def parse_json_file(
     file_path: str,
 ) -> Optional[List[Tuple[str, bool, int, int, int, int]]]:

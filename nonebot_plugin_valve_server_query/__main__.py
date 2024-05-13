@@ -5,13 +5,16 @@ from .queries import queries_server_info, queries_group_info
 from .check import is_valid_address, is_valid_port, is_valid_address_port
 from .database import valve_db
 from .image import server_info_img, group_info_img
-from .file import get_file_info, is_json_file, parse_json_file
+from .file import get_file_info, is_json_file, parse_json_file, get_file_url, url_to_msg
 from .authority import authority_json
+import json
+from typing import Dict
 
-from nonebot import on_command, on_message
+from nonebot import on_command, on_message, on_notice
 from nonebot.adapters.onebot.v11 import (
     MessageSegment,
     Event,
+    NoticeEvent,
     PrivateMessageEvent,
     Bot,
 )
@@ -218,10 +221,11 @@ def _rule(event: Event):
     return isinstance(event, PrivateMessageEvent)
 
 
-get_json_file = on_message(rule=_rule)
+# 适配LLOneBot|NapCat
+get_llonebot_json_file = on_message(rule=_rule)
 
 
-@get_json_file.handle()
+@get_llonebot_json_file.handle()
 async def file_message_judge(event: PrivateMessageEvent, bot: Bot):
     file_info = get_file_info(str(event.get_message()))
     if file_info is not None and is_json_file(file_info.file_name):
@@ -237,13 +241,31 @@ async def file_message_judge(event: PrivateMessageEvent, bot: Bot):
                 server_update,
             ) in groups_info:
                 if group_exist:
-                    await get_json_file.send(
+                    await get_llonebot_json_file.send(
                         f"{group_name} 组已存在，本次更新将覆盖以往数据，新增{server_add}个，删除{server_del}个，更新{server_update}个，共计{server_count}个"
                     )
                 else:
-                    await get_json_file.send(
+                    await get_llonebot_json_file.send(
                         f"{group_name} 组为第一次加入，需重启后才能使用{group_name}指令查服，新增{server_count}个，共计{server_add}个"
                     )
         else:
-            await get_json_file.finish("格式错误")
-    await get_json_file.finish()
+            await get_llonebot_json_file.finish("格式错误")
+    await get_llonebot_json_file.finish()
+
+
+# 适配Lagrange.Core Shamrock
+get_lagrange_json_file = on_notice()
+
+
+@get_lagrange_json_file.handle()
+async def file_notice_judge(event: NoticeEvent, bot: Bot):
+    file_info = get_file_url(event.model_dump())
+    if file_info is not None and is_json_file(file_info.file_name):
+        file_bytes = await url_to_msg(file_info.file_url)
+        if file_bytes:
+            json_data: Dict[str, List[Dict[str, str]]] = json.loads(file_bytes)
+            for key, value in json_data.items():
+                print("key", key)
+                print("value", value)
+
+    await get_lagrange_json_file.finish()
