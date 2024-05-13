@@ -156,36 +156,66 @@ async def _(args: Message = CommandArg()):
 
 
 @valve_server_update.handle()
-async def _(args: Message = CommandArg()):
+async def _(event: Event, args: Message = CommandArg()):
+    user_id = event.get_user_id()
+    user_judge = authority_json.judge_administrators_server_num(user_id)
     if data := args.extract_plain_text():
         data_list: list = data.split()
-        if len(data_list) == 4:
+        if len(data_list) == 4 and user_judge:
+            group_name_list = authority_json.get_administrator_group(user_id)
             group_name: str = data_list[0]
+            if group_name not in group_name_list:
+                await valve_server_update.finish()
             server_id_str: str = data_list[1]
             if server_id_str.isdigit():
                 server_id = int(server_id_str)
                 if is_valid_address(server_ip := data_list[2]):
                     server_port = data_list[3]
                     if is_valid_port(server_port):
-                        if valve_db.judge_valve_server(group_name, server_id):
+                        if not valve_db.judge_valve_server(group_name, server_id):
+                            await valve_server_update.finish("该ID不存在")
+                        else:
                             valve_db.update_valve_server(
                                 group_name, server_id, server_ip, server_port
                             )
-                            await valve_server_update.finish("更新成功")
-                        else:
-                            await valve_server_update.finish("该ID不存在")
+                            await valve_server_update.finish(
+                                f"更新成功，组名：{group_name}"
+                            )
                     else:
                         await valve_server_update.finish("端口号错误")
                 else:
                     await valve_server_update.finish("IP错误")
             else:
                 await valve_server_update.finish("ID应为整数")
-        else:
+        elif len(data_list) != 4 and user_judge:
             await valve_server_update.finish("参数数量错误（呆呆 1 127.0.0.1 25535）")
+        elif len(data_list) == 3 and not user_judge:
+            group_name = authority_json.get_administrator_group(user_id)[0]
+            server_id_str: str = data_list[0]
+            if server_id_str.isdigit():
+                server_id = int(server_id_str)
+                if is_valid_address(server_ip := data_list[1]):
+                    server_port = data_list[2]
+                    if is_valid_port(server_port):
+                        if not valve_db.judge_valve_server(group_name, server_id):
+                            await valve_server_update.finish("该ID不存在")
+                        else:
+                            valve_db.update_valve_server(
+                                group_name, server_id, server_ip, server_port
+                            )
+                            await valve_server_update.finish(
+                                f"更新成功，组名：{group_name}"
+                            )
+                    else:
+                        await valve_server_update.finish("端口号错误")
+                else:
+                    await valve_server_update.finish("IP错误")
+            else:
+                await valve_server_update.finish("ID应为整数")
+        elif len(data_list) != 3 and not user_judge:
+            await valve_server_update.finish("参数数量错误（1 127.0.0.1 25535）")
     else:
-        await valve_server_update.finish(
-            "请输入组名、ID、IP、端口号（呆呆 1 127.0.0.1 25535）"
-        )
+        await valve_server_update.finish()
 
 
 @valve_server_queries.handle()
