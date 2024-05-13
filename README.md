@@ -122,7 +122,7 @@ _✨ NoneBot查服插件，可用于查询V社的游戏服务器，支持不同�
 
 仅对一个组有权限时
 
-![](.\resources\server_add2.png)
+<img src="resources/server_add2.png" width="400"></img>
 
 ### 服务器更新
 
