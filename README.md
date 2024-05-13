@@ -112,38 +112,38 @@ _✨ NoneBot查服插件，可用于查询V社的游戏服务器，支持不同�
 
 ### json快捷更新
 
-<img src="resources/file_receive.png" width="800"></img>
+<img src="https://github.com/LiLuo-B/nonebot-plugin-valve-server-query/blob/main/resources/file_receive.png" width="800"></img>
 
 ### 服务器添加
 
 对多个组都有权限时
 
-<img src="resources/server_add1.png" width="800"></img>
+<img src="https://github.com/LiLuo-B/nonebot-plugin-valve-server-query/blob/main/resources/server_add1.png" width="800"></img>
 
 仅对一个组有权限时
 
-<img src="resources/server_add2.png" width="800"></img>
+<img src="https://github.com/LiLuo-B/nonebot-plugin-valve-server-query/blob/main/resources/server_add2.png" width="800"></img>
 
 ### 服务器更新
 
 对多个组都有权限时
 
-<img src="resources/server_update1.png" width="800"></img>
+<img src="https://github.com/LiLuo-B/nonebot-plugin-valve-server-query/blob/main/resources/server_update1.png" width="800"></img>
 
 仅对一个组有权限时
 
-<img src="resources/server_update2.png" width="800"></img>
+<img src="https://github.com/LiLuo-B/nonebot-plugin-valve-server-query/blob/main/resources/server_update2.png" width="800"></img>
 
 ### 服务器删除
 
 对多个组都有权限时
 
-<img src="resources/server_del1.png" width="800"></img>
+<img src="https://github.com/LiLuo-B/nonebot-plugin-valve-server-query/blob/main/resources/server_del1.png" width="800"></img>
 
 仅对一个组有权限时
 
-<img src="resources/server_del2.png" width="800"></img>
+<img src="https://github.com/LiLuo-B/nonebot-plugin-valve-server-query/blob/main/resources/server_del2.png" width="800"></img>
 
 ### 服务器ip列表
 
-<img src="resources/server_list.png" width="800"></img>
+<img src="https://github.com/LiLuo-B/nonebot-plugin-valve-server-query/blob/main/resources/server_list.png" width="800"></img>
