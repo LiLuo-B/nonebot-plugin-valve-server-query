@@ -55,7 +55,7 @@ class ValveServerSqlite:
 
     def del_l4d2_server(self, group_name: str, server_id: int):
         self.c.execute(
-            "DELETE FROM VALVE_SERVERP WHERE GROUP_NAME=? AND SERVER_ID=?;",
+            "DELETE FROM VALVE_SERVER WHERE GROUP_NAME=? AND SERVER_ID=?;",
             (group_name, server_id),
         )
         self.conn.commit()

@@ -231,7 +231,8 @@ async def file_message_judge(event: PrivateMessageEvent, bot: Bot):
     if file_info is not None and is_json_file(file_info.file_name):
         result = await bot.call_api("get_file", file_id=file_info.file_id)
         file_path = result["file"]
-        if groups_info := parse_json_file(file_path):
+        json_file = open(file_path, "r").read()
+        if groups_info := parse_json_file(json_file):
             for (
                 group_name,
                 group_exist,
@@ -246,7 +247,7 @@ async def file_message_judge(event: PrivateMessageEvent, bot: Bot):
                     )
                 else:
                     await get_llonebot_json_file.send(
-                        f"{group_name} 组为第一次加入，需重启后才能使用{group_name}指令查服，新增{server_count}个，共计{server_add}个"
+                        f"{group_name} 组为第一次加入，新增{server_count}个，共计{server_add}个"
                     )
         else:
             await get_llonebot_json_file.finish("格式错误")
@@ -261,11 +262,26 @@ get_lagrange_json_file = on_notice()
 async def file_notice_judge(event: NoticeEvent, bot: Bot):
     file_info = get_file_url(event.model_dump())
     if file_info is not None and is_json_file(file_info.file_name):
-        file_bytes = await url_to_msg(file_info.file_url)
-        if file_bytes:
-            json_data: Dict[str, List[Dict[str, str]]] = json.loads(file_bytes)
-            for key, value in json_data.items():
-                print("key", key)
-                print("value", value)
+        json_bytes = await url_to_msg(file_info.file_url)
+        if json_bytes:
+            if groups_info := parse_json_file(json_bytes):
+                for (
+                    group_name,
+                    group_exist,
+                    server_count,
+                    server_add,
+                    server_del,
+                    server_update,
+                ) in groups_info:
+                    if group_exist:
+                        await get_llonebot_json_file.send(
+                            f"{group_name} 组已存在，本次更新将覆盖以往数据，新增{server_add}个，删除{server_del}个，更新{server_update}个，共计{server_count}个"
+                        )
+                    else:
+                        await get_llonebot_json_file.send(
+                            f"{group_name} 组为第一次加入，新增{server_count}个，共计{server_add}个"
+                        )
+            else:
+                await get_llonebot_json_file.finish("格式错误")
 
     await get_lagrange_json_file.finish()

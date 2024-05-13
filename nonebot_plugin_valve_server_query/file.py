@@ -50,14 +50,12 @@ def is_json_file(filename: str) -> bool:
 
 # 解析json
 def parse_json_file(
-    file_path: str,
+    json_info: str|bytes,
 ) -> Optional[List[Tuple[str, bool, int, int, int, int]]]:
-    json_flie = open(file_path, "r")
-    content = json_flie.read()
     groups_name = [group_name[0] for group_name in valve_db.get_l4d2_groups_name()]
     groups_info = []
     try:
-        json_data = json.loads(content)
+        json_data = json.loads(json_info)
         if not isinstance(json_data, dict):
             return None
         for key, value in json_data.items():
