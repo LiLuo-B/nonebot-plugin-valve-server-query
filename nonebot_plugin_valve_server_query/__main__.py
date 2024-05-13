@@ -301,12 +301,12 @@ async def _(
         await valve_server_queries.finish(MessageSegment.image(img))
 
 
-def _rule(event: Event):
+def llonebot_rule(event: Event):
     return isinstance(event, PrivateMessageEvent)
 
 
 # 适配LLOneBot|NapCat
-get_llonebot_json_file = on_message(rule=_rule)
+get_llonebot_json_file = on_message(rule=llonebot_rule)
 
 
 @get_llonebot_json_file.handle()
@@ -316,7 +316,7 @@ async def file_message_judge(event: PrivateMessageEvent, bot: Bot):
         result = await bot.call_api("get_file", file_id=file_info.file_id)
         file_path = result["file"]
         json_file = open(file_path, "r").read()
-        if groups_info := parse_json_file(json_file):
+        if groups_info := parse_json_file(event.get_user_id(), json_file):
             for (
                 group_name,
                 group_exist,
@@ -334,7 +334,7 @@ async def file_message_judge(event: PrivateMessageEvent, bot: Bot):
                         f"{group_name} 组为第一次加入，新增{server_count}个，共计{server_add}个"
                     )
         else:
-            await get_llonebot_json_file.finish("格式错误")
+            await get_llonebot_json_file.finish()
     await get_llonebot_json_file.finish()
 
 
@@ -343,12 +343,13 @@ get_lagrange_json_file = on_notice()
 
 
 @get_lagrange_json_file.handle()
-async def file_notice_judge(event: NoticeEvent, bot: Bot):
+async def file_notice_judge(event: NoticeEvent):
+    user_id = event.model_dump()["user_id"]
     file_info = get_file_url(event.model_dump())
     if file_info is not None and is_json_file(file_info.file_name):
         json_bytes = await url_to_msg(file_info.file_url)
         if json_bytes:
-            if groups_info := parse_json_file(json_bytes):
+            if groups_info := parse_json_file(user_id, json_bytes):
                 for (
                     group_name,
                     group_exist,
@@ -366,6 +367,6 @@ async def file_notice_judge(event: NoticeEvent, bot: Bot):
                             f"{group_name} 组为第一次加入，新增{server_count}个，共计{server_add}个"
                         )
             else:
-                await get_llonebot_json_file.finish("格式错误")
+                await get_llonebot_json_file.finish()
 
     await get_lagrange_json_file.finish()

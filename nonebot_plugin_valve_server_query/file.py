@@ -3,11 +3,13 @@ import json
 import aiohttp
 from .model import URLFile, IDFile
 from .database import valve_db
+from .authority import authority_json
 from typing import Optional, List, Tuple
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0",  # noqa: E501
 }
+
 
 async def url_to_msg(url: str):
     """获取URL数据的字节流"""
@@ -50,16 +52,21 @@ def is_json_file(filename: str) -> bool:
 
 # 解析json
 def parse_json_file(
-    json_info: str|bytes,
+    user_id: str,
+    json_info: str | bytes,
 ) -> Optional[List[Tuple[str, bool, int, int, int, int]]]:
-    groups_name = [group_name[0] for group_name in valve_db.get_l4d2_groups_name()]
+    groups_name = [group_name[0] for group_name in valve_db.get_valve_groups_name()]
     groups_info = []
     try:
         json_data = json.loads(json_info)
         if not isinstance(json_data, dict):
             return None
         for key, value in json_data.items():
-            if not isinstance(value, list):
+            print(key)
+            print(authority_json.get_group_administrators(key))
+            if not isinstance(
+                value, list
+            ) or user_id not in authority_json.get_group_administrators(key):
                 return None
             if key in groups_name:
                 is_exists = True
