@@ -4,7 +4,7 @@ from typing import Optional, List
 
 class PlayerInformationConfig(BaseModel):
     name: str
-    score: int
+    score: str
     duration: str
 
 

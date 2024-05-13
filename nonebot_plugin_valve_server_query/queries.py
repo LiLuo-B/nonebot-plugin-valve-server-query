@@ -17,7 +17,11 @@ async def queries_server_info(ip_port: str) -> ServerInformationConfig | bool:
         players.append(
             PlayerInformationConfig(
                 name=player_info.name,
-                score=player_info.score,
+                score=(
+                    f"+{player_info.score}"
+                    if player_info.score >= 0
+                    else f"-{player_info.score}"
+                ),
                 duration=f"{int(player_info.duration//3600)}h{int(player_info.duration% 3600 // 60)}m{int(player_info.duration) % 60}s",
             )
         )
