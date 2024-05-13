@@ -57,7 +57,10 @@ async def _(event: Event, args: Message = CommandArg()):
     if data := args.extract_plain_text():
         data_list: list = data.split()
         if len(data_list) == 4 and user_judge:
+            group_name_list = authority_json.get_administrator_group(user_id)
             group_name: str = data_list[0]
+            if group_name not in group_name_list:
+                await valve_server_add.finish()
             server_id_str: str = data_list[1]
             if server_id_str.isdigit():
                 server_id = int(server_id_str)
@@ -82,9 +85,8 @@ async def _(event: Event, args: Message = CommandArg()):
         elif len(data_list) != 4 and user_judge:
             await valve_server_add.finish("参数数量错误（呆呆 1 127.0.0.1 25535）")
         elif len(data_list) == 3 and not user_judge:
-            group_name = authority_json.get_administrator_group(user_id)
+            group_name = authority_json.get_administrator_group(user_id)[0]
             server_id_str: str = data_list[0]
-            print(server_id_str)
             if server_id_str.isdigit():
                 server_id = int(server_id_str)
                 if is_valid_address(server_ip := data_list[1]):

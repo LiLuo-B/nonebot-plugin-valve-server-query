@@ -38,11 +38,12 @@ class ValveAuthorityJson:
             administrators.extend(group_administrators)
         return administrators
 
-    def get_administrator_group(self, administrator_id: str) -> str:
+    def get_administrator_group(self, administrator_id: str) -> List[str]:
+        group_name_list = []
         for group_name, administrators in self.authority_data.items():
             if administrator_id in administrators:
-                return group_name
-        return None
+                group_name_list.append(group_name)
+        return group_name_list
 
     # 判断用户是否有多个组的权限
     def judge_administrators_server_num(self, administrator_id: str) -> bool:
