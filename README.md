@@ -102,23 +102,23 @@ _✨ NoneBot查服插件，可用于查询V社的游戏服务器，支持不同�
 
 ### 查组
 
-![](.\resources\group_queries.png)
+<img src="resources/group_queries.png" width="800"></img>
 
 ### 查服
 
-![](.\resources\server_queries1.png)
+<img src="resources/server_queries1.png" width="800"></img>
 
-![](.\resources\server_queries2.png)
+<img src="resources/server_queries2.png" width="800"></img>
 
 ### json快捷更新
 
-![](.\resources\file_receive.png)
+<img src="resources/file_receive.png" width="800"></img>
 
 ### 服务器添加
 
 对多个组都有权限时
 
-![](.\resources\server_add1.png)
+<img src="resources/server_add1.png" width="800"></img>
 
 仅对一个组有权限时
 
@@ -128,22 +128,22 @@ _✨ NoneBot查服插件，可用于查询V社的游戏服务器，支持不同�
 
 对多个组都有权限时
 
-![](.\resources\server_update1.png)
+<img src="resources/server_update1.png" width="800"></img>
 
 仅对一个组有权限时
 
-![](.\resources\server_update2.png)
+<img src="resources/server_update2.png" width="800"></img>
 
 ### 服务器删除
 
 对多个组都有权限时
 
-![](.\resources\server_del1.png)
+<img src="resources/server_del1.png" width="800"></img>
 
 仅对一个组有权限时
 
-![](.\resources\server_del2.png)
+<img src="resources/server_del2.png" width="800"></img>
 
 ### 服务器ip列表
 
-![](.\resources\server_list.png)
+<img src="resources/server_list.png" width="800"></img>
