@@ -32,7 +32,6 @@ valve_server_add = on_command(
 valve_server_list = on_command(
     "a2s列表",
     aliases={"A2s列表", "A2S列表"},
-    permission=Permission_Check,
 )
 valve_server_del = on_command(
     "a2s删除",
@@ -130,29 +129,48 @@ async def _(args: Message = CommandArg()):
 
 
 @valve_server_del.handle()
-async def _(args: Message = CommandArg()):
+async def _(event: Event, args: Message = CommandArg()):
+    user_id = event.get_user_id()
+    user_judge = authority_json.judge_administrators_server_num(user_id)
     if data := args.extract_plain_text():
         data_list: list = data.split()
-        if len(data_list) == 2:
+        if len(data_list) == 2 and user_judge:
+            group_name_list = authority_json.get_administrator_group(user_id)
             group_name: str = data_list[0]
+            if group_name not in group_name_list:
+                await valve_server_del.finish()
             server_id_str: str = data_list[1]
             if server_id_str.isdigit():
                 server_id = int(server_id_str)
-                servers_info: list = valve_db.get_valve_servers(group_name)
-                if servers_info:
-                    for server_info in servers_info:
-                        if server_info[0] == server_id:
-                            valve_db.del_valve_server(group_name, server_id)
-                            await valve_server_del.finish("删除成功")
+                if not valve_db.judge_valve_server(group_name, server_id):
                     await valve_server_del.finish("该ID不存在")
                 else:
-                    await valve_server_del.finish("该组不存在")
+                    valve_db.del_valve_server(group_name, server_id)
+                    await valve_server_del.finish(f"删除成功，组名：{group_name}")
             else:
                 await valve_server_del.finish("ID应为整数")
-        else:
+        elif len(data_list) != 2 and user_judge:
             await valve_server_del.finish("参数数量错误（呆呆 1）")
+        elif len(data_list) == 1 and not user_judge:
+            group_name = authority_json.get_administrator_group(user_id)[0]
+            server_id_str: str = data_list[0]
+            if server_id_str.isdigit():
+                server_id = int(server_id_str)
+                if not valve_db.judge_valve_server(group_name, server_id):
+                    await valve_server_del.finish("该ID不存在")
+                else:
+                    valve_db.del_valve_server(
+                        group_name, server_id
+                    )
+                    await valve_server_del.finish(
+                        f"删除成功，组名：{group_name}"
+                    )
+            else:
+                await valve_server_del.finish("ID应为整数")
+        elif len(data_list) != 1 and not user_judge:
+            await valve_server_del.finish("参数数量错误（1 127.0.0.1 25535）")
     else:
-        await valve_server_del.finish("请输入组名、ID（呆呆 1或呆呆 1 2 3 4）")
+        await valve_server_del.finish()
 
 
 @valve_server_update.handle()
