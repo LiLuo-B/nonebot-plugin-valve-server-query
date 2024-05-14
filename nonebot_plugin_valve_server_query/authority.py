@@ -1,15 +1,15 @@
 import json
 from pathlib import Path
 from typing import List
+from .config import plugin_config
 from nonebot.log import logger
 
-valve_path = Path.cwd() / "data/valve"
-json_path = valve_path / "authority.json"
+json_path = Path(plugin_config.a2s_path) / "authority.json"
 
 
 class ValveAuthorityJson:
     def __init__(self):
-        json_exist: bool = Path(json_path).exists()
+        json_exist: bool = json_path.exists()
         if json_exist == True:
             logger.info("配置文件存在,正在加载权限配置")
             with open(json_path, "r") as json_file:

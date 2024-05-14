@@ -16,7 +16,6 @@ from nonebot.adapters.onebot.v11 import (
 )
 from nonebot.adapters.onebot.v11.message import Message
 
-
 async def Permission_Check(event: Event):
     administrators = authority_json.get_all_administrators()
     if event.get_user_id() in administrators:

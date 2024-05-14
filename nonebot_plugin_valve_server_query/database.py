@@ -1,14 +1,14 @@
 import sqlite3
 from pathlib import Path
+from .config import plugin_config
 from nonebot.log import logger
 
-valve_path = Path.cwd() / "data/valve"
-valve_db_path = valve_path / "server.db"
+valve_db_path = Path(plugin_config.a2s_path) / "server.db"
 
 
 class ValveServerSqlite:
     def __init__(self):
-        valve_path.mkdir(parents=True, exist_ok=True)
+        Path(plugin_config.a2s_path).mkdir(parents=True, exist_ok=True)
         server_db_exist: bool = valve_db_path.exists()
         self.conn = sqlite3.connect(valve_db_path)
         self.c = self.conn.cursor()
