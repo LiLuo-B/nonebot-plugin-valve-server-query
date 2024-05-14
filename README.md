@@ -33,7 +33,6 @@ pip install nonebot_plugin_valve_server_query
 ```
 
 ### git
-nonebot_plugin_valve_server_query
 ```shell
 git clone https://github.com/LiLuo-B/nonebot-plugin-valve-server-query.git
 ```
