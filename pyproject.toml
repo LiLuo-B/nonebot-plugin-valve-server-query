@@ -1,6 +1,6 @@
 [project]
 name = "nonebot-plugin-valve-server-query"
-version = "0.5.4"
+version = "0.5.5"
 description = "nonebot-plugin-valve-server-query"
 readme = "README.md"
 requires-python = ">=3.8, <4.0"
@@ -15,7 +15,7 @@ builtin_plugins = []
 
 [tool.poetry]
 name = "nonebot-plugin-valve-server-query"
-version = "0.5.4"
+version = "0.5.5"
 description = "Valve server query plugin for NoneBot2"
 authors = ["LiLuo-B"]
 license = "GPLv3"

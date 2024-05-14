@@ -23,19 +23,19 @@ _✨ NoneBot查服插件，可用于查询V社的游戏服务器，支持不同�
 ### nb-cli
 
 ```shell
-待更新
+nb plugin install nonebot_plugin_valve_server_query
 ```
 
 ### pip
 
 ```shell
-待更新
+pip install nonebot_plugin_valve_server_query
 ```
 
 ### git
-
+nonebot_plugin_valve_server_query
 ```shell
-待更新
+git clone https://github.com/LiLuo-B/nonebot-plugin-valve-server-query.git
 ```
 
 ## 配置
