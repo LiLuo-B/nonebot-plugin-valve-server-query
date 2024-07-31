@@ -4,7 +4,7 @@ import aiohttp
 from .model import URLFile, IDFile
 from .database import valve_db
 from .authority import authority_json
-from typing import Optional, List, Tuple
+from typing import Optional, List, Tuple, Union
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0",  # noqa: E501
@@ -53,7 +53,7 @@ def is_json_file(filename: str) -> bool:
 # 解析json
 def parse_json_file(
     user_id: str,
-    json_info: str | bytes,
+    json_info: Union[str, bytes],
 ) -> Optional[List[Tuple[str, bool, int, int, int, int]]]:
     groups_name = [group_name[0] for group_name in valve_db.get_valve_groups_name()]
     groups_info = []

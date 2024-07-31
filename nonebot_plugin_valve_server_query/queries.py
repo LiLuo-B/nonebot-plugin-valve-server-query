@@ -3,9 +3,10 @@ from .model import ServerInformationConfig, PlayerInformationConfig
 from asyncio.exceptions import TimeoutError
 from .database import valve_db
 import asyncio
+from typing import Union, Optional
 
 
-async def queries_server_info(ip_port: str) -> ServerInformationConfig | bool:
+async def queries_server_info(ip_port: str) -> Union[bool, ServerInformationConfig]:
     ip, port = ip_port.split(":")
     try:
         players_info: list[Player] = await aplayers(address=(ip, port), timeout=5.0)
@@ -48,7 +49,7 @@ async def queries_server_info(ip_port: str) -> ServerInformationConfig | bool:
 
 async def queries_info(
     id: int, ip: str, port: int
-) -> tuple[int, ServerInformationConfig | None]:
+) -> tuple[int, Optional[ServerInformationConfig]]:
     try:
         server_info: SourceInfo = await ainfo(address=(ip, port), timeout=2.0)
     except (ConnectionRefusedError, TimeoutError):
@@ -78,7 +79,7 @@ async def queries_info(
 
 async def queries_group_info(
     group_name: str,
-) -> list[tuple[int, ServerInformationConfig | None]]:
+) -> list[tuple[int, Optional[ServerInformationConfig]]]:
     server_list = valve_db.get_valve_servers(group_name)
     tasks = [queries_info(id, ip, port) for id, ip, port in server_list]
     result = await asyncio.gather(*tasks, return_exceptions=True)

@@ -1,6 +1,7 @@
 from pathlib import Path
 from nonebot import require
 import jinja2
+from typing import Optional
 
 require("nonebot_plugin_htmlrender")
 from nonebot_plugin_htmlrender import html_to_pic
@@ -33,7 +34,7 @@ async def group_info_img(
     server_online_count: int,
     player_count: int,
     player_online_count: int,
-    group_info: tuple[int, ServerInformationConfig | None],
+    group_info: tuple[int, Optional[ServerInformationConfig]],
 ) -> bytes:
     template = env.get_template("group_info.html")
     html = await template.render_async(

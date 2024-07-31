@@ -2,6 +2,7 @@ import sqlite3
 from pathlib import Path
 from .config import plugin_config
 from nonebot.log import logger
+from typing import Optional
 
 valve_db_path = Path(plugin_config.a2s_path) / "server.db"
 
@@ -80,7 +81,7 @@ class ValveServerSqlite:
         return bool(cursor.fetchall())
 
     # 获取服务器指定ID对应的ip
-    def get_valve_server_ip(self, group_name: str, server_id: int) -> str | None:
+    def get_valve_server_ip(self, group_name: str, server_id: int) -> Optional[str]:
         cursor = self.c.execute(
             "SELECT SERVER_IP,SERVER_PORT FROM VALVE_SERVER WHERE GROUP_NAME=? AND SERVER_ID=?;",
             (group_name, server_id),
