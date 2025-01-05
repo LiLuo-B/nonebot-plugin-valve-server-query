@@ -5,6 +5,8 @@ from .database import valve_db
 from .image import server_info_img, group_info_img
 from .file import get_file_info, is_json_file, parse_json_file, get_file_url, url_to_msg
 from .authority import authority_json
+from .config import plugin_config
+from .utils import domain_to_ip
 from nonebot import on_command, on_message, on_notice
 from nonebot.params import CommandArg, CommandStart, RawCommand
 from nonebot.adapters.onebot.v11 import (
@@ -15,6 +17,7 @@ from nonebot.adapters.onebot.v11 import (
     Bot,
 )
 from nonebot.adapters.onebot.v11.message import Message
+
 
 async def Permission_Check(event: Event):
     administrators = authority_json.get_all_administrators()
@@ -262,6 +265,8 @@ async def _(
                     if server_info == False:
                         await valve_server_queries.finish("服务器无响应")
                     img = await server_info_img(server_info)
+                    if plugin_config.a2s_ip == True:
+                        ip_port =await domain_to_ip(ip_port)
                     await valve_server_queries.finish(
                         Message(
                             [

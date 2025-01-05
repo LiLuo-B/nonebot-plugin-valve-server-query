@@ -4,6 +4,8 @@ from asyncio.exceptions import TimeoutError
 from .database import valve_db
 import asyncio
 from typing import Union, Optional
+from .config import plugin_config
+from .utils import mask_player_name
 
 
 async def queries_server_info(ip_port: str) -> Union[bool, ServerInformationConfig]:
@@ -15,6 +17,8 @@ async def queries_server_info(ip_port: str) -> Union[bool, ServerInformationConf
         return False
     players: list[PlayerInformationConfig] = []
     for player_info in players_info:
+        if plugin_config.a2s_mask_name == True:
+            player_info.name = await mask_player_name(player_info.name)
         players.append(
             PlayerInformationConfig(
                 name=player_info.name,

@@ -3,6 +3,7 @@
 </p>
 
 
+
 <h1 align="center">nonebot-plugin-valve-server-query</h1>
 
 _✨ NoneBot查服插件，可用于查询V社的游戏服务器，支持不同服组的权限配置以及服务器信息在线更新✨_
@@ -16,6 +17,7 @@ _✨ NoneBot查服插件，可用于查询V社的游戏服务器，支持不同�
   </a>
   <img src="https://img.shields.io/badge/python-3.8+-blue.svg" alt="python">
 </p>
+
 
 
 ## 安装
@@ -32,18 +34,24 @@ nb plugin install nonebot_plugin_valve_server_query
 pip install nonebot_plugin_valve_server_query
 ```
 
-### git
+### git（单独安装）
+
 ```shell
 git clone https://github.com/LiLuo-B/nonebot-plugin-valve-server-query.git
+source .venv/bin/activate
+pip install poetry
+poetry install
 ```
 
 ## 配置
 
 ### .env|.env.prod|.env.dev
 
-| 配置项   | 必填 | 默认值         | 说明                                         |
-| -------- | ---- | -------------- | -------------------------------------------- |
-| a2s_path | 否   | "./data/valve" | 你的数据文件路径（包含权限配置与服务器信息） |
+| 配置项        | 必填 | 默认值         | 说明                                                   |
+| ------------- | ---- | -------------- | ------------------------------------------------------ |
+| a2s_path      | 否   | "./data/valve" | 你的数据文件路径（包含权限配置与服务器信息）           |
+| a2s_ip        | 否   | False          | 是否将输出的域名转换为数字IP（防止动态公网IP暴露域名） |
+| a2s_mask_name | 否   | False          | 是否屏蔽玩家名字（防止玩家名字违规被举报封号）         |
 
 
 
