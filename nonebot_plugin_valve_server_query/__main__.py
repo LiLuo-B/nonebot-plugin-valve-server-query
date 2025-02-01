@@ -3,7 +3,7 @@ from .queries import queries_server_info, queries_group_info
 from .check import is_valid_address, is_valid_port, is_valid_address_port
 from .database import valve_db
 from .image import server_info_img, group_info_img
-from .file import get_file_info, is_json_file, parse_json_file, get_file_url, url_to_msg
+from .file import is_json_file, parse_json_file, get_file_info, url_to_msg
 from .authority import authority_json
 from .config import plugin_config
 from .utils import domain_to_ip
@@ -266,7 +266,7 @@ async def _(
                         await valve_server_queries.finish("服务器无响应")
                     img = await server_info_img(server_info)
                     if plugin_config.a2s_ip == True:
-                        ip_port =await domain_to_ip(ip_port)
+                        ip_port = await domain_to_ip(ip_port)
                     await valve_server_queries.finish(
                         Message(
                             [
@@ -309,48 +309,18 @@ def llonebot_rule(event: Event):
     return isinstance(event, PrivateMessageEvent)
 
 
-# 适配LLOneBot|NapCat
-get_llonebot_json_file = on_message(rule=llonebot_rule)
+get_json_file = on_message(rule=llonebot_rule)
 
 
-@get_llonebot_json_file.handle()
+@get_json_file.handle()
 async def file_message_judge(event: PrivateMessageEvent, bot: Bot):
+    user_id = str(event.user_id)
     file_info = get_file_info(str(event.get_message()))
     if file_info is not None and is_json_file(file_info.file_name):
-        result = await bot.call_api("get_file", file_id=file_info.file_id)
-        file_path = result["file"]
-        json_file = open(file_path, "r").read()
-        if groups_info := parse_json_file(event.get_user_id(), json_file):
-            for (
-                group_name,
-                group_exist,
-                server_count,
-                server_add,
-                server_del,
-                server_update,
-            ) in groups_info:
-                if group_exist:
-                    await get_llonebot_json_file.send(
-                        f"{group_name} 组已存在，本次更新将覆盖以往数据，新增{server_add}个，删除{server_del}个，更新{server_update}个，共计{server_count}个"
-                    )
-                else:
-                    await get_llonebot_json_file.send(
-                        f"{group_name} 组为第一次加入，新增{server_count}个，共计{server_add}个"
-                    )
-        else:
-            await get_llonebot_json_file.finish()
-    await get_llonebot_json_file.finish()
-
-
-# 适配Lagrange.Core Shamrock
-get_lagrange_json_file = on_notice()
-
-
-@get_lagrange_json_file.handle()
-async def file_notice_judge(event: NoticeEvent):
-    user_id = event.model_dump()["user_id"]
-    file_info = get_file_url(event.model_dump())
-    if file_info is not None and is_json_file(file_info.file_name):
+        json_bytes = None
+        if file_info.file_id.endswith(".json"):
+            result = await bot.call_api("get_file", file_id=file_info.file_id)
+            file_info.file_url = "file://" + result["url"]
         json_bytes = await url_to_msg(file_info.file_url)
         if json_bytes:
             if groups_info := parse_json_file(user_id, json_bytes):
@@ -363,14 +333,11 @@ async def file_notice_judge(event: NoticeEvent):
                     server_update,
                 ) in groups_info:
                     if group_exist:
-                        await get_llonebot_json_file.send(
+                        await get_json_file.send(
                             f"{group_name} 组已存在，本次更新将覆盖以往数据，新增{server_add}个，删除{server_del}个，更新{server_update}个，共计{server_count}个"
                         )
                     else:
-                        await get_llonebot_json_file.send(
+                        await get_json_file.send(
                             f"{group_name} 组为第一次加入，新增{server_count}个，共计{server_add}个"
                         )
-            else:
-                await get_llonebot_json_file.finish()
-
-    await get_lagrange_json_file.finish()
+    await get_json_file.finish()

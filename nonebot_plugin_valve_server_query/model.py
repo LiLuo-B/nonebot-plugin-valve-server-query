@@ -20,13 +20,7 @@ class ServerInformationConfig(BaseModel):
     players: Optional[List[PlayerInformationConfig]] = []
 
 
-class IDFile(BaseModel):
-    file_name: str
-    file_id: str
-    file_size: int
-
-
-class URLFile(BaseModel):
+class FileInfo(BaseModel):
     file_name: str
     file_url: str
-    file_size: int
+    file_id: str
